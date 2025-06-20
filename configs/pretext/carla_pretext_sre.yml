@@ -1,0 +1,44 @@
+# Setup
+setup: pretext
+
+# Model
+backbone: resnet_ts
+model_kwargs:
+   head: mlp
+   features_dim: 8
+res_kwargs:
+  in_channels: 2
+  mid_channels: 12
+  use_lstm: false
+
+# Dataset
+train_db_name: sre
+val_db_name: sre
+num_classes: 10
+
+# Loss
+criterion: pretext
+criterion_kwargs:
+   temperature: 0.2
+
+# Hyperparameters
+epochs: 50
+optimizer: adam
+optimizer_kwargs:
+   #nesterov: False
+   #momentum: 0.9
+   lr: 0.001
+   weight_decay: 0.01
+scheduler: cosine
+scheduler_kwargs:
+   lr_decay_rate: 0.01
+batch_size: 512
+num_workers: 0
+
+# Transformations
+augmentation_strategy: ts
+transformation_kwargs:
+   noise_sigma: 0.01
+
+anomaly_kwargs:
+   portion: 0.99
