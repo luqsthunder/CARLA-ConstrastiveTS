@@ -50,8 +50,11 @@ class SREKPI(Dataset):
         temp = pl.read_parquet(file_path).select(columns).cast(pl.Float32).to_numpy()
         if self.train:
             known_anons = temp[:int(len(temp) * (1 - test_split)), -1]
-            temp = temp[:int(len(temp) * (1 - test_split)), :2]
-            temp = temp[known_anons != 1]
+            temp = temp[:int(len(temp) * (1 - test_split)), :1]
+            
+            if sanomaly.portion_len > 0:
+                temp = temp[known_anons == 0]
+                
             self.mean = np.mean(temp, axis=0)
             self.std = np.std(temp , axis=0)
             self.targets = []
@@ -59,7 +62,7 @@ class SREKPI(Dataset):
             temp = temp[int(len(temp) * (1 - test_split)):]
             self.targets =  temp[:, -1]
 
-            temp = temp[int(len(temp) * (1 - test_split)):, :2]
+            temp = temp[int(len(temp) * (1 - test_split)):, :1]
 
             self.std[self.std == 0.0] = 1.0
             temp = (temp - self.mean) / self.std

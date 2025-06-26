@@ -73,7 +73,7 @@ def get_predictions(p, dataloader, model, return_features=False, is_training=Fal
         else:
             targets.append(batch['target'])
         
-        res = model(ts.view(bs, h, w))
+        res = model(ts.view(bs, h, w), forward_pass="return_all")
         output = res['output']
         if return_features:
             features[ptr: ptr+bs] = res['features']

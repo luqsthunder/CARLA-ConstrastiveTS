@@ -63,11 +63,13 @@ class AugmentedDataset(Dataset):
             ts_ss_augment = self.subseq_anomaly(ts_org)
 
             sstd = torch.where(sstd == 0.0, torch.tensor(1.0, device=sstd.device), sstd)
+            ts_ss_augment = (ts_ss_augment - mmean) / sstd
+            ts_ss_augment = ts_ss_augment.unsqueeze(dim=1)
 
             self.samples[index] = {
                 "ts_org": (ts_org - mmean) / sstd,
                 "ts_w_augment": (ts_w_augment - mmean) / sstd,
-                "ts_ss_augment": (ts_ss_augment - mmean) / sstd,
+                "ts_ss_augment": ts_ss_augment,
                 "target": ts_trg,
             }
 

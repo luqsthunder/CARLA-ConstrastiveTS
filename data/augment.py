@@ -116,7 +116,8 @@ class SubAnomaly(object):
         max_len = int(window.shape[0] * 0.9)
         subsequence_length = np.random.randint(min_len, max_len)
         start_index = np.random.randint(0, len(window) - subsequence_length)
-        if (window.ndim > 1):
+
+        if (window.ndim > 1 and window.shape[1] > 1):
             num_features = window.shape[1]
             num_dims = np.random.randint(int(num_features/10), int(num_features/2)) #(int(num_features/5), int(num_features/2))
             for k in range(num_dims):
